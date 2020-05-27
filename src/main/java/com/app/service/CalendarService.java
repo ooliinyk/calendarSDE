@@ -20,8 +20,6 @@ public class CalendarService {
 		return eventRepository.findBetween(start, end);
 	}
 
-	;
-
 	public Iterable<Event> findAll() {
 		return eventRepository.findAll();
 	}
@@ -32,5 +30,10 @@ public class CalendarService {
 
 	public void deleteById(Long id){
 		eventRepository.deleteById(id);
+	}
+
+	public Event findById(Long id){
+// TODO  check get.
+		return eventRepository.findById(id).get();
 	}
 }

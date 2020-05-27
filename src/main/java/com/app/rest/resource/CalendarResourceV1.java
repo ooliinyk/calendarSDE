@@ -69,5 +69,13 @@ public class CalendarResourceV1 {
 
 	}
 
+	@GetMapping("/api/events/{id}")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@Transactional
+	public Event findEventById(@PathVariable("id") Long id) {
+
+		return calendarService.findById(id);
+
+	}
 
 }
