@@ -25,12 +25,19 @@ public class Event {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-// add allowed length -
+
+	private String title;
+
+	// add allowed length -
 	private String notes;
 
 	private LocalDateTime startTime;
 
 	private LocalDateTime endTime;
+
+	private LocalDateTime created;
+
+	private LocalDateTime updated;
 
 	private String location;
 

@@ -25,6 +25,8 @@ public class CalendarService {
 	}
 
 	public Event create(Event event){
+		event.setCreated(LocalDateTime.now());
+		event.setUpdated(LocalDateTime.now());
 		return eventRepository.save(event);
 	}
 
