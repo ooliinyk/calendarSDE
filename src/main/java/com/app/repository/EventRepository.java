@@ -1,6 +1,7 @@
 package com.app.repository;
 
 import com.app.entity.Event;
+import com.app.entity.EventCount;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,5 +14,15 @@ import java.util.List;
 public interface EventRepository extends CrudRepository<Event, Long> {
 
 	@Query("from Event e where not(e.endTime < :from or e.startTime > :to)")
-	List<Event> findBetween(@Param("from") @DateTimeFormat(iso= DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @Param("to") @DateTimeFormat(iso= DateTimeFormat.ISO.DATE_TIME) LocalDateTime end);
+	List<Event> findBetween(@Param("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @Param("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end);
+
+	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , DATE_FORMAT(e.startTime, '%Y-%m') as month)  " +
+			"from Event e where not(e.endTime < :from or e.startTime > :to) group by month( e" +
+			".startTime) ")
+	List<EventCount> countEventsBetween(@Param("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @Param("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end);
+
+	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , DATE_FORMAT(e.startTime, '%Y-%m') as month)  " +
+			"from Event e where year(e.startTime) = :year group by month( e.startTime) ")
+	List<EventCount> countEventsInYear(@Param("year") Integer year);
+
 }

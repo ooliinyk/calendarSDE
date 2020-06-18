@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,7 +44,7 @@ public class Event {
 //	private Location location;
 
 	@ManyToOne(cascade = {CascadeType.ALL})
-	private EventInfo evnetInfo;
+	private EventType eventType;
 
 	private String creator;
 

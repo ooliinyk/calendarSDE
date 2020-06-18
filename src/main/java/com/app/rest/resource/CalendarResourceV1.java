@@ -2,7 +2,10 @@ package com.app.rest.resource;
 
 
 import com.app.entity.Event;
+import com.app.entity.EventCount;
+import com.app.entity.EventType;
 import com.app.service.CalendarService;
+import com.app.service.EventTypeService;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -31,6 +35,9 @@ public class CalendarResourceV1 {
 
 	@Autowired
 	CalendarService calendarService;
+
+	@Autowired
+	EventTypeService eventTypeService;
 
 	@GetMapping("/api/welcome")
 	@ResponseBody
@@ -75,6 +82,40 @@ public class CalendarResourceV1 {
 	public Event findEventById(@PathVariable("id") Long id) {
 
 		return calendarService.findById(id);
+
+	}
+
+	@GetMapping("/api/events/count")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	List<EventCount> countEventsBetween(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+													@RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return calendarService.countEventsBetween(start, end);
+	}
+
+	@GetMapping("/api/events/countAll")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	Long countAllEvents() {
+		return calendarService.countAllEvents();
+	}
+
+	@GetMapping("/api/events/countInYear")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	List<EventCount> countEventsBetween(@RequestParam("year")  Integer year) {
+		return calendarService.countEventsInYear(year);
+	}
+
+	@GetMapping("/api/eventTypes")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	Iterable<EventType> eventTypes() {
+		return eventTypeService.findAll();
+	}
+
+	@GetMapping("/api/eventTypes/{id}")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@Transactional
+	public EventType findEventTypeById(@PathVariable("id") Long id) {
+
+		return eventTypeService.findById(id);
 
 	}
 

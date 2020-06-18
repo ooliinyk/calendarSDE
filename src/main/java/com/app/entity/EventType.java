@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class EventInfo {
+public class EventType {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
