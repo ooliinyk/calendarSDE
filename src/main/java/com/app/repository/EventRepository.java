@@ -21,6 +21,11 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 			".startTime) ")
 	List<EventCount> countEventsBetween(@Param("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @Param("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end);
 
+// TODO convert countEventsBetween countEventsFrom to one function. Check for null should be checked on DB side
+	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , DATE_FORMAT(e.startTime, '%Y-%m') as month)  " +
+			"from Event e where e.startTime > :from group by month( e.startTime) ")
+	List<EventCount> countEventsFrom(@Param("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start);
+
 	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , DATE_FORMAT(e.startTime, '%Y-%m') as month)  " +
 			"from Event e where year(e.startTime) = :year group by month( e.startTime) ")
 	List<EventCount> countEventsInYear(@Param("year") Integer year);

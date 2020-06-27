@@ -43,7 +43,8 @@ public class Event {
 //	@ManyToOne(cascade = {CascadeType.ALL})
 //	private Location location;
 
-	@ManyToOne(cascade = {CascadeType.ALL})
+// TODO DURING CREATE RETURN Empty values, but in DB correct values
+	@ManyToOne(cascade = {CascadeType.MERGE})
 	private EventType eventType;
 
 	private String creator;

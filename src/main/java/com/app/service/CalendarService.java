@@ -5,6 +5,7 @@ import com.app.entity.Event;
 import com.app.entity.EventCount;
 import com.app.repository.EventRepository;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ public class CalendarService {
 	}
 
 	public List<EventCount> countEventsBetween(LocalDateTime start, LocalDateTime end) {
+		if (end == null || end.equals("")) {
+			return eventRepository.countEventsFrom(start);
+		}
 		return eventRepository.countEventsBetween(start, end);
 	}
 
