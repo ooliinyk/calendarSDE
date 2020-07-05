@@ -11,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,13 +40,14 @@ public class CalendarResourceV1 {
 	@Autowired
 	EventTypeService eventTypeService;
 
+	@CrossOrigin
 	@GetMapping("/api/welcome")
 	@ResponseBody
 	String home() {
 		return "Welcome!";
 	}
 
-
+	@CrossOrigin
 	@GetMapping("/api/events")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	Iterable<Event> events(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
@@ -53,6 +55,7 @@ public class CalendarResourceV1 {
 		return calendarService.findBetween(start, end);
 	}
 
+	@CrossOrigin
 	@GetMapping("/api/events/all")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	Iterable<Event> events() {
@@ -60,6 +63,7 @@ public class CalendarResourceV1 {
 	}
 
 
+	@CrossOrigin
 	@PostMapping("/api/events/create")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Transactional
@@ -67,6 +71,7 @@ public class CalendarResourceV1 {
 		return calendarService.create(event);
 	}
 
+	@CrossOrigin
 	@DeleteMapping("/api/events/{id}/delete")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Transactional
@@ -76,6 +81,7 @@ public class CalendarResourceV1 {
 
 	}
 
+	@CrossOrigin
 	@GetMapping("/api/events/{id}")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Transactional
@@ -85,6 +91,7 @@ public class CalendarResourceV1 {
 
 	}
 
+	@CrossOrigin
 	@GetMapping("/api/events/count")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	List<EventCount> countEventsBetween(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
@@ -92,24 +99,28 @@ public class CalendarResourceV1 {
 		return calendarService.countEventsBetween(start, end);
 	}
 
+	@CrossOrigin
 	@GetMapping("/api/events/countAll")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	Long countAllEvents() {
 		return calendarService.countAllEvents();
 	}
 
+	@CrossOrigin
 	@GetMapping("/api/events/countInYear")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	List<EventCount> countEventsBetween(@RequestParam("year")  Integer year) {
 		return calendarService.countEventsInYear(year);
 	}
 
+	@CrossOrigin
 	@GetMapping("/api/eventTypes")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	Iterable<EventType> eventTypes() {
 		return eventTypeService.findAll();
 	}
 
+	@CrossOrigin
 	@GetMapping("/api/eventTypes/{id}")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Transactional
