@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -43,22 +45,30 @@ public class CalendarResourceV1 {
 	@CrossOrigin
 	@GetMapping("/api/welcome")
 	@ResponseBody
-	String home() {
+	public String home() {
 		return "Welcome!";
 	}
 
 	@CrossOrigin
 	@GetMapping("/api/events")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	Iterable<Event> events(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+	public Iterable<Event> events(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
 						   @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
 		return calendarService.findBetween(start, end);
 	}
 
+
+	@CrossOrigin
+	@GetMapping("/api/events/map")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	public Map<YearMonth, List<Event>> findBetweenNew(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+						   @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return calendarService.findBetweenNew(start, end);
+	}
 	@CrossOrigin
 	@GetMapping("/api/events/all")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	Iterable<Event> events() {
+	public Iterable<Event> events() {
 		return calendarService.findAll();
 	}
 
@@ -67,7 +77,7 @@ public class CalendarResourceV1 {
 	@PostMapping("/api/events/create")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Transactional
-	Event createEvent(@RequestBody Event event) {
+	public Event createEvent(@RequestBody Event event) {
 		return calendarService.create(event);
 	}
 
