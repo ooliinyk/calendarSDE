@@ -21,11 +21,22 @@ public class CalendarService {
 	EventRepository eventRepository;
 
 	public List<Event> findBetween(LocalDateTime start, LocalDateTime end) {
-		return eventRepository.findBetween(start, end);
+		//	TODO in future findAllByEndTimeLessThanEqualAndStartTimeGreaterThanEqual should allow null values.
+		//	https://www.onooks.com/spring-data-jpa-named-query-ignoring-null-parameters/
+		if (start == null && end == null) {
+			return null;
+		}
+		if (start == null || start.equals("")) {
+			return eventRepository.findAllByEndTimeLessThanEqual(end);
+		} else if (end == null || end.equals("")) {
+			return eventRepository.findAllByStartTimeGreaterThanEqual(start);
+		}
+		return eventRepository.findAllByEndTimeLessThanEqualAndStartTimeGreaterThanEqual(end, start);
+
 	}
 
-	public Map<YearMonth,List<Event>> findBetweenNew(LocalDateTime start, LocalDateTime end) {
-		return eventRepository.findBetween(start, end).stream().collect(Collectors.groupingBy(e -> YearMonth.from(e.getStartTime())));
+	public Map<YearMonth, List<Event>> findYearMonthEventBetween(LocalDateTime start, LocalDateTime end) {
+		return findBetween(start, end).stream().collect(Collectors.groupingBy(e -> YearMonth.from(e.getStartTime())));
 	}
 
 	public List<EventCount> countEventsBetween(LocalDateTime start, LocalDateTime end) {
@@ -58,7 +69,6 @@ public class CalendarService {
 	}
 
 	public Event findById(Long id) {
-// TODO  check get.
 		return eventRepository.findById(id).get();
 	}
 }

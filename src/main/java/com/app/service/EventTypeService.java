@@ -1,6 +1,5 @@
 package com.app.service;
 
-import com.app.entity.Event;
 import com.app.entity.EventType;
 import com.app.repository.EventTypeRepository;
 
@@ -18,7 +17,6 @@ public class EventTypeService {
 	}
 
 	public EventType findById(Long id) {
-// TODO  check get.
 		return eventTypeRepository.findById(id).get();
 	}
 

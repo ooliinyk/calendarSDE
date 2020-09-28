@@ -18,12 +18,9 @@ import lombok.Data;
 @Entity
 public class Event {
 
-//TODO GENERATED VALUE IS NOT WORKING SEPARETLY, CHECK WHY
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
 
 	private String title;
 
@@ -40,9 +37,6 @@ public class Event {
 
 	private String location;
 
-//	@ManyToOne(cascade = {CascadeType.ALL})
-//	private Location location;
-
 // TODO DURING CREATE RETURN Empty values, but in DB correct values
 	@ManyToOne(cascade = {CascadeType.MERGE})
 	private EventType eventType;
@@ -50,10 +44,6 @@ public class Event {
 	private String creator;
 
 	@ElementCollection
-//	@CollectionTable(name ="attendees")
 	private List<String> attendees= new ArrayList<>();
 
-//	private String attendees;
-//	@ManyToOne(cascade = {CascadeType.ALL})
-//	User user;
 }

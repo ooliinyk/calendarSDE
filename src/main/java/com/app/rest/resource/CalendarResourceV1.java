@@ -11,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -52,8 +54,8 @@ public class CalendarResourceV1 {
 	@CrossOrigin
 	@GetMapping("/api/events")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	public Iterable<Event> events(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-						   @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+	public Iterable<Event> events(@RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+						   @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
 		return calendarService.findBetween(start, end);
 	}
 
@@ -63,7 +65,7 @@ public class CalendarResourceV1 {
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public Map<YearMonth, List<Event>> findBetweenNew(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
 						   @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return calendarService.findBetweenNew(start, end);
+		return calendarService.findYearMonthEventBetween(start, end);
 	}
 	@CrossOrigin
 	@GetMapping("/api/events/all")
@@ -85,10 +87,9 @@ public class CalendarResourceV1 {
 	@DeleteMapping("/api/events/{id}/delete")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Transactional
+	@ResponseStatus(HttpStatus.OK)
 	public void deleteEvent(@PathVariable("id") Long id) {
-
-		calendarService.deleteById(id);
-
+		 calendarService.deleteById(id);
 	}
 
 	@CrossOrigin
@@ -96,7 +97,6 @@ public class CalendarResourceV1 {
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Transactional
 	public Event findEventById(@PathVariable("id") Long id) {
-
 		return calendarService.findById(id);
 
 	}
