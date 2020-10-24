@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ public class Event {
 
 	private String title;
 
-	// add allowed length -
+	@Column(length=5000)
 	private String notes;
 
 	private LocalDateTime startTime;
@@ -42,6 +43,10 @@ public class Event {
 	private EventType eventType;
 
 	private String creator;
+
+	private String branch;
+
+	private Byte[] image;
 
 	@ElementCollection
 	private List<String> attendees= new ArrayList<>();
