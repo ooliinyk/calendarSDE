@@ -3,6 +3,7 @@ package com.app.service;
 
 import com.app.entity.Event;
 import com.app.entity.EventCount;
+import com.app.exception.NoEventException;
 import com.app.repository.EventRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,16 @@ public class CalendarService {
 		event.setCreated(LocalDateTime.now());
 		event.setUpdated(LocalDateTime.now());
 		return eventRepository.save(event);
+	}
+
+	public Event update(Event event) throws NoEventException {
+		if (eventRepository.findById(event.getId()).isPresent()){
+			event.setUpdated(LocalDateTime.now());
+			return eventRepository.save(event);
+		}else {
+			throw new NoEventException("there is no events with id=" + event.getId());
+		}
+
 	}
 
 	public void deleteById(Long id) {

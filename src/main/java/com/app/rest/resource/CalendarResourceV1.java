@@ -4,6 +4,7 @@ package com.app.rest.resource;
 import com.app.entity.Event;
 import com.app.entity.EventCount;
 import com.app.entity.EventType;
+import com.app.exception.NoEventException;
 import com.app.service.CalendarService;
 import com.app.service.EventTypeService;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -81,6 +82,14 @@ public class CalendarResourceV1 {
 	@Transactional
 	public Event createEvent(@RequestBody Event event) {
 		return calendarService.create(event);
+	}
+
+	@CrossOrigin
+	@PostMapping("/api/events/update")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@Transactional
+	public Event updateEvent(@RequestBody Event event) throws NoEventException {
+		return calendarService.update(event);
 	}
 
 	@CrossOrigin
