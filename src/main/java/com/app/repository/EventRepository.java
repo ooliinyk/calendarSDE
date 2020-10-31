@@ -16,11 +16,11 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 	@Query("from Event e where not(e.endTime < :from or e.startTime > :to)")
 	List<Event> findBetween(@Param("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @Param("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end);
 
-	List<Event> findAllByEndTimeLessThanEqualAndStartTimeGreaterThanEqual(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate);
+	List<Event> findAllByEndTimeLessThanEqualAndStartTimeGreaterThanEqualAndBranchIs(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate, String branch);
 
-	List<Event> findAllByEndTimeLessThanEqual(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)   LocalDateTime endTime);
+	List<Event> findAllByEndTimeLessThanEqualAndBranchIs(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)   LocalDateTime endTime, String branch);
 
-	List<Event> findAllByStartTimeGreaterThanEqual( @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate);
+	List<Event> findAllByStartTimeGreaterThanEqualAndBranchIs( @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate, String branch);
 
 	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , DATE_FORMAT(e.startTime, '%Y-%m') as month)  " +
 			"from Event e where not(e.endTime < :from or e.startTime > :to) group by month( e" +

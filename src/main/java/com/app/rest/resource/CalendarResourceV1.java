@@ -55,19 +55,22 @@ public class CalendarResourceV1 {
 	@CrossOrigin
 	@GetMapping("/api/events")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	public Iterable<Event> events(@RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-						   @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return calendarService.findBetween(start, end);
+	public Iterable<Event> events(@RequestParam(value = "start", required = false) @DateTimeFormat(iso =
+			DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+			@RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end, @RequestParam(value = "branch", required = false) String branch) {
+		return calendarService.findBetween(start, end, branch);
 	}
 
 
 	@CrossOrigin
 	@GetMapping("/api/events/map")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	public Map<YearMonth, List<Event>> findBetweenNew(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-						   @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return calendarService.findYearMonthEventBetween(start, end);
+	public Map<YearMonth, List<Event>> findBetweenNew(@RequestParam(value ="start", required = false) @DateTimeFormat(iso =
+			DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+			@RequestParam(value ="end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end, @RequestParam(value = "branch", required = false) String branch) {
+		return calendarService.findYearMonthEventBetween(start, end, branch);
 	}
+
 	@CrossOrigin
 	@GetMapping("/api/events/all")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)

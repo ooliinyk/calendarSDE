@@ -21,23 +21,23 @@ public class CalendarService {
 	@Autowired
 	EventRepository eventRepository;
 
-	public List<Event> findBetween(LocalDateTime start, LocalDateTime end) {
+	public List<Event> findBetween(LocalDateTime start, LocalDateTime end, String branch) {
 		//	TODO in future findAllByEndTimeLessThanEqualAndStartTimeGreaterThanEqual should allow null values.
 		//	https://www.onooks.com/spring-data-jpa-named-query-ignoring-null-parameters/
 		if (start == null && end == null) {
 			return null;
 		}
 		if (start == null || start.equals("")) {
-			return eventRepository.findAllByEndTimeLessThanEqual(end);
+			return eventRepository.findAllByEndTimeLessThanEqualAndBranchIs(end, branch);
 		} else if (end == null || end.equals("")) {
-			return eventRepository.findAllByStartTimeGreaterThanEqual(start);
+			return eventRepository.findAllByStartTimeGreaterThanEqualAndBranchIs(start, branch);
 		}
-		return eventRepository.findAllByEndTimeLessThanEqualAndStartTimeGreaterThanEqual(end, start);
+		return eventRepository.findAllByEndTimeLessThanEqualAndStartTimeGreaterThanEqualAndBranchIs(end, start, branch);
 
 	}
 
-	public Map<YearMonth, List<Event>> findYearMonthEventBetween(LocalDateTime start, LocalDateTime end) {
-		return findBetween(start, end).stream().collect(Collectors.groupingBy(e -> YearMonth.from(e.getStartTime())));
+	public Map<YearMonth, List<Event>> findYearMonthEventBetween(LocalDateTime start, LocalDateTime end, String branch) {
+		return findBetween(start, end, branch).stream().collect(Collectors.groupingBy(e -> YearMonth.from(e.getStartTime())));
 	}
 
 	public List<EventCount> countEventsBetween(LocalDateTime start, LocalDateTime end) {
