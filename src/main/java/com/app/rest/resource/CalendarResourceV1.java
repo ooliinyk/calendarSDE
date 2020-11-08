@@ -4,6 +4,7 @@ package com.app.rest.resource;
 import com.app.entity.Event;
 import com.app.entity.EventCount;
 import com.app.entity.EventType;
+import com.app.entity.enums.Branch;
 import com.app.exception.NoEventException;
 import com.app.service.CalendarService;
 import com.app.service.EventTypeService;
@@ -57,7 +58,7 @@ public class CalendarResourceV1 {
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public Iterable<Event> events(@RequestParam(value = "start", required = false) @DateTimeFormat(iso =
 			DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-			@RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end, @RequestParam(value = "branch", required = false) String branch) {
+			@RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end, @RequestParam(value = "branch", required = false) Branch branch) {
 		return calendarService.findBetween(start, end, branch);
 	}
 
@@ -67,7 +68,7 @@ public class CalendarResourceV1 {
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public Map<YearMonth, List<Event>> findBetweenNew(@RequestParam(value ="start", required = false) @DateTimeFormat(iso =
 			DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-			@RequestParam(value ="end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end, @RequestParam(value = "branch", required = false) String branch) {
+			@RequestParam(value ="end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end, @RequestParam(value = "branch", required = false) Branch branch) {
 		return calendarService.findYearMonthEventBetween(start, end, branch);
 	}
 

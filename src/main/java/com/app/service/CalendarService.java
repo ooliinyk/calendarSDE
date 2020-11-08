@@ -3,6 +3,7 @@ package com.app.service;
 
 import com.app.entity.Event;
 import com.app.entity.EventCount;
+import com.app.entity.enums.Branch;
 import com.app.exception.NoEventException;
 import com.app.repository.EventRepository;
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,23 +23,26 @@ public class CalendarService {
 	@Autowired
 	EventRepository eventRepository;
 
-	public List<Event> findBetween(LocalDateTime start, LocalDateTime end, String branch) {
+	public List<Event> findBetween(LocalDateTime start, LocalDateTime end, Branch branch) {
 		//	TODO in future findAllByEndTimeLessThanEqualAndStartTimeGreaterThanEqual should allow null values.
 		//	https://www.onooks.com/spring-data-jpa-named-query-ignoring-null-parameters/
 		if (start == null && end == null) {
 			return null;
 		}
+		List<Branch> branches = new ArrayList<>();
+		branches.add(branch);
+		branches.add(Branch.GENERAL);
 		if (start == null || start.equals("")) {
-			return eventRepository.findAllByEndTimeLessThanEqualAndBranchIs(end, branch);
+			return eventRepository.findAllByEndLessThanEqualAndBranchIn(end, branches);
 		} else if (end == null || end.equals("")) {
-			return eventRepository.findAllByStartTimeGreaterThanEqualAndBranchIs(start, branch);
+			return eventRepository.findAllByStartGreaterThanEqualAndBranchIn(start, branches);
 		}
-		return eventRepository.findAllByEndTimeLessThanEqualAndStartTimeGreaterThanEqualAndBranchIs(end, start, branch);
+		return eventRepository.findAllByEndLessThanEqualAndStartGreaterThanEqualAndBranchIn(end, start, branches);
 
 	}
 
-	public Map<YearMonth, List<Event>> findYearMonthEventBetween(LocalDateTime start, LocalDateTime end, String branch) {
-		return findBetween(start, end, branch).stream().collect(Collectors.groupingBy(e -> YearMonth.from(e.getStartTime())));
+	public Map<YearMonth, List<Event>> findYearMonthEventBetween(LocalDateTime start, LocalDateTime end, Branch branch) {
+		return findBetween(start, end, branch).stream().collect(Collectors.groupingBy(e -> YearMonth.from(e.getStart())));
 	}
 
 	public List<EventCount> countEventsBetween(LocalDateTime start, LocalDateTime end) {

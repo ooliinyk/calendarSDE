@@ -4,15 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
+import com.app.entity.enums.Branch;
 import lombok.Data;
 
 @Data
@@ -28,9 +22,9 @@ public class Event {
 	@Column(length=5000)
 	private String notes;
 
-	private LocalDateTime startTime;
+	private LocalDateTime start;
 
-	private LocalDateTime endTime;
+	private LocalDateTime end;
 
 	private LocalDateTime created;
 
@@ -44,7 +38,8 @@ public class Event {
 
 	private String creator;
 
-	private String branch;
+	@Enumerated(EnumType.ORDINAL)
+	private Branch branch;
 
 	private Byte[] image;
 
