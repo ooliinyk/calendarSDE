@@ -1,5 +1,5 @@
 package com.app.entity.enums;
 
 public enum Branch {
-    BRNO, OSTRAVA, OLOMOUCE, GENERAL
+    BRNO, OSTRAVA, OLOMOUC, GENERAL
 }
