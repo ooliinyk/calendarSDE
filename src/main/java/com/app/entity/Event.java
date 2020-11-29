@@ -19,7 +19,7 @@ public class Event {
 
 	private String title;
 
-	@Column(length=5000)
+	@Column(length=60000)
 	private String notes;
 
 	private LocalDateTime start;
