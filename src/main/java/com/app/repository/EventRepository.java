@@ -14,10 +14,13 @@ import java.util.List;
 
 public interface EventRepository extends CrudRepository<Event, Long> {
 
+	@Deprecated
 	@Query("from Event e where not(e.end < :from or e.start > :to)")
 	List<Event> findBetween(@Param("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @Param("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end);
 
-	List<Event> findAllByEndLessThanEqualAndStartGreaterThanEqualAndBranchIn(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, List<Branch> branches);
+	List<Event> findAllByEndLessThanEqualOrStartGreaterThanEqualAndBranchIn(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, List<Branch> branches);
+
+	List<Event> findByBranchIn(List<Branch> branches);
 
 	List<Event> findAllByEndLessThanEqualAndBranchIn(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)   LocalDateTime end, List<Branch> branches);
 
