@@ -1,13 +1,12 @@
 package com.app.entity;
 
+import com.app.entity.enums.Branch;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.*;
-
-import com.app.entity.enums.Branch;
-import lombok.Data;
 
 @Data
 @Entity
@@ -32,9 +31,11 @@ public class Event {
 
 	private String location;
 
-// TODO DURING CREATE RETURN Empty values, but in DB correct values
 	@ManyToOne(cascade = {CascadeType.MERGE})
 	private EventType eventType;
+
+	@ManyToOne(cascade = {CascadeType.MERGE})
+	private Image imageEntity;
 
 	private String creator;
 

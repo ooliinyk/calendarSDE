@@ -3,12 +3,15 @@ package com.app.service;
 
 import com.app.entity.Event;
 import com.app.entity.EventCount;
+import com.app.entity.Image;
 import com.app.entity.enums.Branch;
 import com.app.exception.NoEventException;
 import com.app.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -66,9 +69,12 @@ public class CalendarService {
         return eventRepository.findAll();
     }
 
-    public Event create(Event event) {
+    public Event create(Event event, MultipartFile multipartFile) throws IOException {
         event.setCreated(LocalDateTime.now());
         event.setUpdated(LocalDateTime.now());
+        if (multipartFile != null) {
+            event.setImageEntity(buildImage(multipartFile));
+        }
         return eventRepository.save(event);
     }
 
@@ -89,4 +95,12 @@ public class CalendarService {
     public Event findById(Long id) {
         return eventRepository.findById(id).get();
     }
+
+	private Image buildImage(MultipartFile multipartFile) throws IOException {
+		Image image = new Image();
+		image.setName(multipartFile.getOriginalFilename());
+		image.setData(multipartFile.getBytes());
+		image.setType(multipartFile.getContentType());
+		return image;
+	}
 }

@@ -10,30 +10,19 @@ import com.app.service.CalendarService;
 import com.app.service.EventTypeService;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
-
-import javax.transaction.Transactional;
-
-import io.swagger.annotations.Api;
 
 @Api(value = "CalendarResourceV1", description = "Resource for ..")
 @RestController
@@ -84,8 +73,8 @@ public class CalendarResourceV1 {
 	@PostMapping("/api/events/create")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Transactional
-	public Event createEvent(@RequestBody Event event) {
-		return calendarService.create(event);
+	public Event createEvent(@RequestPart(value ="event", required = true) Event event, @RequestPart(value ="file", required = false) MultipartFile file ) throws IOException {
+		return calendarService.create(event, file);
 	}
 
 	@CrossOrigin
