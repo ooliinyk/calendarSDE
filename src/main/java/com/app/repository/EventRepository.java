@@ -18,7 +18,7 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 	@Query("from Event e where not(e.end < :from or e.start > :to)")
 	List<Event> findBetween(@Param("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @Param("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end);
 
-	List<Event> findAllByEndLessThanEqualOrStartGreaterThanEqualAndBranchIn(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, List<Branch> branches);
+	List<Event> findAllByEndLessThanEqualAndBranchInOrStartGreaterThanEqualAndBranchIn(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,List<Branch> branches2, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, List<Branch> branches);
 
 	List<Event> findByBranchIn(List<Branch> branches);
 
@@ -26,17 +26,17 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 
 	List<Event> findAllByStartGreaterThanEqualAndBranchIn( @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate, List<Branch> branches);
 
-	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , DATE_FORMAT(e.start, '%Y-%m') as month)  " +
+	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , to_char(e.start, 'YYYY-mm') as month)  " +
 			"from Event e where not(e.end < :from or e.start > :to) group by month( e" +
 			".start) ")
 	List<EventCount> countEventsBetween(@Param("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @Param("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end);
 
 // TODO convert countEventsBetween countEventsFrom to one function. Check for null should be checked on DB side
-	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , DATE_FORMAT(e.start, '%Y-%m') as month)  " +
+	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , to_char(e.start, 'YYYY-mm') as month)  " +
 			"from Event e where e.start > :from group by month( e.start) ")
 	List<EventCount> countEventsFrom(@Param("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start);
 
-	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , DATE_FORMAT(e.start, '%Y-%m') as month)  " +
+	@Query(value = "select  new com.app.entity.EventCount((count(e.id) + '') as count , to_char(e.start, 'YYYY-mm') as month)  " +
 			"from Event e where year(e.start) = :year group by month( e.start) ")
 	List<EventCount> countEventsInYear(@Param("year") Integer year);
 

@@ -7,10 +7,12 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.app.entity.enums.Branch;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
 
 	@Id
@@ -24,6 +26,8 @@ public class Event {
 
 	private LocalDateTime start;
 
+// name end is not allowed postgress
+	@Column(name = "endDate")
 	private LocalDateTime end;
 
 	private LocalDateTime created;

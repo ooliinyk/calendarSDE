@@ -37,7 +37,7 @@ public class CalendarService {
         } else if (end == null || end.equals("")) {
             return eventRepository.findAllByStartGreaterThanEqualAndBranchIn(start, branches);
         }
-        return eventRepository.findAllByEndLessThanEqualOrStartGreaterThanEqualAndBranchIn(end, start, branches);
+        return eventRepository.findAllByEndLessThanEqualAndBranchInOrStartGreaterThanEqualAndBranchIn(end,branches, start, branches);
 
     }
 
